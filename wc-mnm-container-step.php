@@ -95,7 +95,7 @@ class WC_MNM_Container_Step {
 			'label'       => __( 'Container Size Step', 'wc-mnm-min-weight' ),
 			'desc_tip'    => true,
 			'description' => __( 'Force customers to purchase quantities in multiples. Ignored if min and max sizes are the same.', 'woocommerce' ),
-			'type'        => 'text',
+			'type'        => 'number',
 			'data_type'   => 'decimal',
 			'value'			=> $mnm_product_object->get_meta( '_mnm_container_step', true, 'edit' ),
 			'desc_tip'      => true,
