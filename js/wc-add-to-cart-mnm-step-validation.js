@@ -3,7 +3,7 @@
 	/**
 	 * Main container object.
 	 */
-	function WC_MNM_Weight( container ) {
+	function WC_MNM_Container_Step( container ) {
 
 		var self       = this;
 		this.container = container;
@@ -71,15 +71,14 @@
 
 		};
 
-
-	} // End WC_MNM_Weight.
+	} // End WC_MNM_Container_Step.
 
 	/*-----------------------------------------------------------------*/
 	/*  Initialization.                                                */
 	/*-----------------------------------------------------------------*/
 
 	$( 'body' ).on( 'wc-mnm-initializing', function( e, container ) {
-		var weight = new WC_MNM_Weight( container );
+		var weight = new WC_MNM_Container_Step( container );
 		weight.initialize();
 	});
 
