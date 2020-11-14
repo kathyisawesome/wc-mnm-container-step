@@ -182,7 +182,8 @@ class WC_MNM_Container_Step {
 			'i18n_min_qty_error'          => __( '%vPlease choose at least %min items to continue. ', 'wc-mnm-container-step' ),
 			'i18n_max_qty_error_singular' => __( '%vPlease choose fewer than %max item to continue. ', 'wc-mnm-container-step' ),
 			'i18n_max_qty_error'          => __( '%vPlease choose fewer than %max items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_step_error'             => __( '%vYour total quantity of items must be a multiple of %step.', 'wc-mnm-container-step' )
+			'i18n_step_error'             => __( '%vYour total quantity of items must be a multiple of %step.', 'wc-mnm-container-step' ),
+			'i18n_min_or_max_error'       => __( '%vPlease choose either %min or %max items to continue&hellip;.', 'wc-mnm-container-step' ),
 		);
 
 		return array_merge( $params, $new_params );
