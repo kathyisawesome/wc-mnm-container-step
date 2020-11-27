@@ -44,7 +44,7 @@
 			if ( container.either_or ) {
 				message = wc_mnm_params.i18n_min_or_max_error.replace( '%min', container.api.get_min_container_size() ).replace( '%max', container.api.get_max_container_size() );
 			} else {
-				message = wc_mnm_params.i18n_step_error.replace( '%step', step );
+				message = wc_mnm_params.i18n_step_error.replace( '%step', container.step );
 			}
 
 			return message;
