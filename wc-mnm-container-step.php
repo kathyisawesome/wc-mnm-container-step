@@ -28,7 +28,6 @@ class WC_MNM_Container_Step {
 	 * constants
 	 */
 	CONST VERSION = '1.0.0-beta-3';
-	CONST REQUIRED_WOO = '4.0.0';
 
 	/**
 	 * WC_MNM_Container_Step Constructor
