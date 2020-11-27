@@ -1,4 +1,4 @@
-# WooCommerce Mix and Match: Container Quantity Step
+# WooCommerce Mix and Match: Container Step
 Require Mix and Match container size to be in quantity multiples, ie: 6,12,18,etc. 
 
 ![image](https://user-images.githubusercontent.com/507025/80157388-5155aa00-8583-11ea-9050-d3ddead27af5.png)
