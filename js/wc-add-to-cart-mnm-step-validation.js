@@ -20,7 +20,7 @@
 				if ( container.either_or ) {
 					wc_mnm_params.i18n_min_max_qty_error = '';
 				}
-				this.bind_event_handlers();		
+				this.bind_event_handlers();
 			}
 		};
 
@@ -95,8 +95,8 @@
 	/*-----------------------------------------------------------------*/
 
 	$( 'body' ).on( 'wc-mnm-initializing', function( e, container ) {
-		var weight = new WC_MNM_Container_Step( container );
-		weight.initialize();
+		var step = new WC_MNM_Container_Step( container );
+		step.initialize();
 	});
 
 } ) ( jQuery );
