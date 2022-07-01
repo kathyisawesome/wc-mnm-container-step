@@ -199,7 +199,8 @@ class WC_MNM_Container_Step {
 	 * @return void
 	 */
 	public static function register_scripts() {
-		wp_register_script( 'wc-add-to-cart-mnm-step-validation', plugins_url( 'assets/js/frontend/wc-add-to-cart-mnm-step-validation.js', __FILE__ ), array( 'wc-add-to-cart-mnm' ), self::VERSION, true );
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		wp_register_script( 'wc-add-to-cart-mnm-step-validation', plugins_url( 'assets/js/frontend/wc-add-to-cart-mnm-step-validation' . $suffix . '.js', __FILE__ ), array( 'wc-add-to-cart-mnm' ), self::VERSION, true );
 	}
 
 	/**
