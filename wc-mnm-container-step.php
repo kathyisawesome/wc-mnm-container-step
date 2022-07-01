@@ -46,13 +46,13 @@ class WC_MNM_Container_Step {
 		add_action( 'init', array( __CLASS__, 'load_plugin_textdomain' ) );
 
 		// Add extra meta.
-		add_action( 'woocommerce_mnm_product_options', array( __CLASS__, 'container_size_options') , 15, 2 );
+		add_action( 'wc_mnm_admin_product_options', array( __CLASS__, 'container_size_options') , 15, 2 );
 		add_action( 'woocommerce_admin_process_product_object', array( __CLASS__, 'process_meta' ), 20 );
 
 		// Register Scripts.
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_scripts' ) );
-		add_filter( 'woocommerce_mnm_add_to_cart_parameters', array( __CLASS__, 'script_parameters' ) );
-		add_filter( 'woocommerce_mix_and_match_data_attributes', array( __CLASS__, 'add_data_attributes' ), 10, 2 );
+		add_filter( 'wc_mnm_add_to_cart_script_parameters', array( __CLASS__, 'script_parameters' ) );
+		add_filter( 'wc_mnm_container_data_attributes', array( __CLASS__, 'add_data_attributes' ), 10, 2 );
 
 		// Display Scripts.
 		add_action( 'woocommerce_mix-and-match_add_to_cart', array( __CLASS__, 'load_scripts' ) );
@@ -61,7 +61,7 @@ class WC_MNM_Container_Step {
 		add_action( 'wc_quick_view_enqueue_scripts', array( __CLASS__, 'load_scripts' ) );
 
 		// Add to cart validation.
-		add_filter( 'woocommerce_mnm_add_to_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
+		add_filter( 'wc_mnm_add_to_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
 
     }
 
