@@ -13,8 +13,8 @@
 		 * Init.
 		 */
 		this.initialize = function() {
-			if( 'undefined' !== typeof container.$mnm_cart.data( 'container_step' ) && parseInt( container.$mnm_cart.data( 'container_step' ) ) > 0 ) {
-				container.step = parseInt( container.$mnm_cart.data( 'container_step' ) );
+			if( 'undefined' !== typeof container.$mnm_cart.data( 'container_step' ) && parseInt( container.$mnm_cart.data( 'container_step' ), 10 ) > 0 ) {
+				container.step = parseInt( container.$mnm_cart.data( 'container_step' ), 10 );
 				container.either_or = 1 === ( container.api.get_max_container_size() - container.api.get_min_container_size() ) / container.step;
 				
 				if ( container.either_or ) {
@@ -38,9 +38,6 @@
 
 			var message = '';
 
-			var min = container.api.get_min_container_size();
-			var max = container.api.get_max_container_size();
-
 			if ( container.either_or ) {
 				message = wc_mnm_params.i18n_min_or_max_error.replace( '%min', container.api.get_min_container_size() ).replace( '%max', container.api.get_max_container_size() );
 			} else {
@@ -49,15 +46,12 @@
 
 			return message;
 
-		}
+		};
 
 		/**
 		 * Validate.
 		 */
 		this.validate = function( event, container ) {
-
-			var min = container.api.get_min_container_size();
-			var max = container.api.get_max_container_size();
 
 			if( container.step > 1 ) {
 
