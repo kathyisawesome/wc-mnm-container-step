@@ -37,6 +37,11 @@ class WC_MNM_Container_Step {
 	 */
 	public static function init() {
 
+		// Quietly quit if MNM is not active.
+		if ( ! function_exists( 'wc_mix_and_match' ) ) {
+			return false;
+		}
+
 		// Load translation files.
 		add_action( 'init', array( __CLASS__, 'load_plugin_textdomain' ) );
 
@@ -253,4 +258,4 @@ class WC_MNM_Container_Step {
 endif; // end class_exists check
 
 // Launch the whole plugin.
-add_action( 'woocommerce_mnm_loaded', array( 'WC_MNM_Container_Step', 'init' ) );
+add_action( 'plugins_loaded', array( 'WC_MNM_Container_Step', 'init' ), 20 );
