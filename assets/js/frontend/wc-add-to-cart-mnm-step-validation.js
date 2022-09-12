@@ -57,9 +57,7 @@
 				var valid_message      = '';
 				var total_qty          = container.api.get_container_size();
 				var qty_message        = container.selected_quantity_message( total_qty ); // "Selected X total".
-				var passes_validation  = 0 == ( total_qty % container.step );
-
-				console.debug("passes_validation", passes_validation);
+				var passes_validation  = 0 === ( total_qty % container.step );
 
 				// Validation.
 				switch ( true ) {
