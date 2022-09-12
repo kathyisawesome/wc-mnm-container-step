@@ -95,9 +95,9 @@ class WC_MNM_Container_Step {
 
 		woocommerce_wp_text_input( array(
 			'id'            => '_mnm_container_step',
-			'label'       => __( 'Container Size Step', 'wc-mnm-min-weight' ),
+			'label'       => esc_html__( 'Container Size Step', 'wc-mnm-container-step' ),
 			'desc_tip'    => true,
-			'description' => __( 'Force customers to purchase quantities in multiples. Ignored if min and max sizes are the same.', 'woocommerce' ),
+			'description' => esc_html__( 'Force customers to purchase quantities in multiples. Ignored if min and max sizes are the same.', 'wc-mnm-container-step' ),
 			'type'        => 'number',
 			'data_type'   => 'decimal',
 			'value'			=> $mnm_product_object->get_meta( '_mnm_container_step', true, 'edit' ),
@@ -149,7 +149,7 @@ class WC_MNM_Container_Step {
 			// Validate the step modulus.
 			if ( 0 !== $total_qty % $step ) {
 				$error_message = sprintf( 
-					__( '&quot;%1$s&quot; is incorrectly configured. The total quantity of selected products must be a multiple of %2$d.', 'wc-mnm-container-step' ),
+					esc_html__( '&quot;%1$s&quot; is incorrectly configured. The total quantity of selected products must be a multiple of %2$d.', 'wc-mnm-container-step' ),
 					$product->get_title(),
 					$step
 				);
@@ -177,16 +177,44 @@ class WC_MNM_Container_Step {
 	public static function script_parameters( $params ) {
 
 		$new_params = array(
-			'i18n_qty_error'              => __( '%vPlease select %s items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_qty_error_single'       => __( '%vPlease select %s item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_empty_error'   		  => __( 'Please select at least 1 item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_max_qty_error'      => __( '%vPlease choose between %min and %max items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_qty_error_singular' => __( '%vPlease choose at least %min item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_qty_error'          => __( '%vPlease choose at least %min items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_max_qty_error_singular' => __( '%vPlease choose fewer than %max item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_max_qty_error'          => __( '%vPlease choose fewer than %max items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_step_error'             => __( '%vYour total quantity of items must be a multiple of %step.', 'wc-mnm-container-step' ),
-			'i18n_min_or_max_error'       => __( '%vPlease choose either %min or %max items to continue&hellip;.', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_qty_error_singular'   => _x( '%v Please select at least %min item (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_qty_error'            => _x( '%v Please select at least %min items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_max_qty_error_singular'   => _x( '%v Please select fewer than %max item (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_max_qty_error'            => _x( '%v Please select fewer than %max items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_max_qty_error'        => esc_html_x( '%v Please select between %min and %max items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_or_max_error'         => esc_html_x( '%v Please choose either %min or %max items to continue&hellip;.', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_message'       => _x( '%v You may select any multiple of %step items or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_max_message'    => _x( '%v You may select between %min and %max items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_max_message'    => _x( '%v You may select fewer items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_max_no_min_message'    => _x( '%v You may select up to %max items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_message'    => _x( '%v You may select more items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_or_max_message' => _x( '%v You may select either %min or %max items, or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_message'       => _x( '%v You may select any multiple of %step items or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_max_message'    => _x( '%v You may select between %min and %max items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_max_message'    => _x( '%v You may select fewer items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_max_no_min_message'    => _x( '%v You may select up to %max items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_message'    => _x( '%v You may select more items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_or_max_message' => _x( '%v You may select either %min or %max items, or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+
 		);
 
 		return array_merge( $params, $new_params );
