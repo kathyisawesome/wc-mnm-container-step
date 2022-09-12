@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: WooCommerce Mix and Match - Container Step
- * Version: 1.0.0-beta-3
  * Plugin URI: https://github.com/kathyisawesome/wc-mnm-container-step
+ * Version: 2.0.0
  * Description: Require container size to be in quantity mnultiples, ie: 12,16,20,etc. 
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
@@ -31,7 +31,7 @@ class WC_MNM_Container_Step {
 	/**
 	 * constants
 	 */
-	CONST VERSION = '1.0.0-beta-3';
+	const VERSION = '2.0.0';
 
 	/**
 	 * WC_MNM_Container_Step Constructor
