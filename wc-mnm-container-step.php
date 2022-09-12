@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: WooCommerce Mix and Match - Container Step
- * Plugin URI: http://www.woocommerce.com/products/woocommerce-mix-and-match-products/
- * Version: 1.0.0-beta-3
+ * Plugin URI: https://github.com/kathyisawesome/wc-mnm-container-step
+ * Version: 2.0.0
  * Description: Require container size to be in quantity mnultiples, ie: 12,16,20,etc. 
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
@@ -10,6 +10,10 @@
  * Developer URI: http://kathyisawesome.com/
  * Text Domain: wc-mnm-container-step
  * Domain Path: /languages
+ * 
+ * GitHub Plugin URI: kathyisawesome/wc-mnm-grouped
+ * GitHub Plugin URI: https://github.com/kathyisawesome/wc-mnm-grouped
+ * Release Asset: true
  *
  * Copyright: © 2020 Kathy Darling
  * License: GNU General Public License v3.0
@@ -27,7 +31,7 @@ class WC_MNM_Container_Step {
 	/**
 	 * constants
 	 */
-	CONST VERSION = '1.0.0-beta-3';
+	const VERSION = '2.0.0';
 
 	/**
 	 * WC_MNM_Container_Step Constructor
@@ -37,17 +41,22 @@ class WC_MNM_Container_Step {
 	 */
 	public static function init() {
 
+		// Quietly quit if MNM is not active.
+		if ( ! function_exists( 'wc_mix_and_match' ) ) {
+			return false;
+		}
+
 		// Load translation files.
 		add_action( 'init', array( __CLASS__, 'load_plugin_textdomain' ) );
 
 		// Add extra meta.
-		add_action( 'woocommerce_mnm_product_options', array( __CLASS__, 'container_size_options') , 15, 2 );
+		add_action( 'wc_mnm_admin_product_options', array( __CLASS__, 'container_size_options') , 15, 2 );
 		add_action( 'woocommerce_admin_process_product_object', array( __CLASS__, 'process_meta' ), 20 );
 
 		// Register Scripts.
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_scripts' ) );
-		add_filter( 'woocommerce_mnm_add_to_cart_parameters', array( __CLASS__, 'script_parameters' ) );
-		add_filter( 'woocommerce_mix_and_match_data_attributes', array( __CLASS__, 'add_data_attributes' ), 10, 2 );
+		add_filter( 'wc_mnm_add_to_cart_script_parameters', array( __CLASS__, 'script_parameters' ) );
+		add_filter( 'wc_mnm_container_data_attributes', array( __CLASS__, 'add_data_attributes' ), 10, 2 );
 
 		// Display Scripts.
 		add_action( 'woocommerce_mix-and-match_add_to_cart', array( __CLASS__, 'load_scripts' ) );
@@ -56,7 +65,7 @@ class WC_MNM_Container_Step {
 		add_action( 'wc_quick_view_enqueue_scripts', array( __CLASS__, 'load_scripts' ) );
 
 		// Add to cart validation.
-		add_filter( 'woocommerce_mnm_add_to_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
+		add_filter( 'wc_mnm_add_to_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
 
     }
 
@@ -90,9 +99,9 @@ class WC_MNM_Container_Step {
 
 		woocommerce_wp_text_input( array(
 			'id'            => '_mnm_container_step',
-			'label'       => __( 'Container Size Step', 'wc-mnm-min-weight' ),
+			'label'       => esc_html__( 'Container Size Step', 'wc-mnm-container-step' ),
 			'desc_tip'    => true,
-			'description' => __( 'Force customers to purchase quantities in multiples. Ignored if min and max sizes are the same.', 'woocommerce' ),
+			'description' => esc_html__( 'Force customers to purchase quantities in multiples. Ignored if min and max sizes are the same.', 'wc-mnm-container-step' ),
 			'type'        => 'number',
 			'data_type'   => 'decimal',
 			'value'			=> $mnm_product_object->get_meta( '_mnm_container_step', true, 'edit' ),
@@ -144,7 +153,7 @@ class WC_MNM_Container_Step {
 			// Validate the step modulus.
 			if ( 0 !== $total_qty % $step ) {
 				$error_message = sprintf( 
-					__( '&quot;%1$s&quot; is incorrectly configured. The total quantity of selected products must be a multiple of %2$d.', 'wc-mnm-container-step' ),
+					esc_html__( '&quot;%1$s&quot; is incorrectly configured. The total quantity of selected products must be a multiple of %2$d.', 'wc-mnm-container-step' ),
 					$product->get_title(),
 					$step
 				);
@@ -172,16 +181,44 @@ class WC_MNM_Container_Step {
 	public static function script_parameters( $params ) {
 
 		$new_params = array(
-			'i18n_qty_error'              => __( '%vPlease select %s items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_qty_error_single'       => __( '%vPlease select %s item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_empty_error'   		  => __( 'Please select at least 1 item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_max_qty_error'      => __( '%vPlease choose between %min and %max items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_qty_error_singular' => __( '%vPlease choose at least %min item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_min_qty_error'          => __( '%vPlease choose at least %min items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_max_qty_error_singular' => __( '%vPlease choose fewer than %max item to continue. ', 'wc-mnm-container-step' ),
-			'i18n_max_qty_error'          => __( '%vPlease choose fewer than %max items to continue. ', 'wc-mnm-container-step' ),
-			'i18n_step_error'             => __( '%vYour total quantity of items must be a multiple of %step.', 'wc-mnm-container-step' ),
-			'i18n_min_or_max_error'       => __( '%vPlease choose either %min or %max items to continue&hellip;.', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_qty_error_singular'   => _x( '%v Please select at least %min item (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_qty_error'            => _x( '%v Please select at least %min items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_max_qty_error_singular'   => _x( '%v Please select fewer than %max item (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_max_qty_error'            => _x( '%v Please select fewer than %max items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_max_qty_error'        => esc_html_x( '%v Please select between %min and %max items (in multiples of %step) to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the script placeholder for min quantity. %max is script placeholder for max quantity.
+			'i18n_step_min_or_max_error'         => esc_html_x( '%v Please choose either %min or %max items to continue&hellip;.', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_message'       => _x( '%v You may select any multiple of %step items or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_max_message'    => _x( '%v You may select between %min and %max items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_max_message'    => _x( '%v You may select fewer items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_max_no_min_message'    => _x( '%v You may select up to %max items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_message'    => _x( '%v You may select more items (in multiples of %step) or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_step_valid_min_or_max_message' => _x( '%v You may select either %min or %max items, or add to cart to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_message'       => _x( '%v You may select any multiple of %step items or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_max_message'    => _x( '%v You may select between %min and %max items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_max_message'    => _x( '%v You may select fewer items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_max_no_min_message'    => _x( '%v You may select up to %max items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_message'    => _x( '%v You may select more items (in multiples of %step) or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+			// translators                       :  %v is the current quantity message. %min is the container minimum. %max is the container maximum.
+			'i18n_edit_step_valid_min_or_max_message' => _x( '%v You may select either %min or %max items, or update to continue&hellip;', '[Frontend]', 'wc-mnm-container-step' ),
+
 		);
 
 		return array_merge( $params, $new_params );
@@ -194,9 +231,8 @@ class WC_MNM_Container_Step {
 	 * @return void
 	 */
 	public static function register_scripts() {
-
-		wp_register_script( 'wc-add-to-cart-mnm-step-validation', plugins_url( 'js/wc-add-to-cart-mnm-step-validation.js', __FILE__ ), array( 'wc-add-to-cart-mnm' ), self::VERSION, true );
-
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		wp_register_script( 'wc-add-to-cart-mnm-step-validation', plugins_url( 'assets/js/frontend/wc-add-to-cart-mnm-step-validation' . $suffix . '.js', __FILE__ ), array( 'wc-add-to-cart-mnm' ), self::VERSION, true );
 	}
 
 	/**
@@ -253,4 +289,4 @@ class WC_MNM_Container_Step {
 endif; // end class_exists check
 
 // Launch the whole plugin.
-add_action( 'woocommerce_mnm_loaded', array( 'WC_MNM_Container_Step', 'init' ) );
+add_action( 'plugins_loaded', array( 'WC_MNM_Container_Step', 'init' ), 20 );
