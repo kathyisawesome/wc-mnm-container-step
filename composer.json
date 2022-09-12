@@ -1,0 +1,8 @@
+{
+    "name": "kathyisawesome/wc-mnm-container-step",
+    "description": "Require Mix and Match container size to be in quantity multiples, ie: 6,12,18,etc.",
+    "homepage": "https://github.com/kathyisawesome/wc-mnm-container-step",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later"
+}
+  
