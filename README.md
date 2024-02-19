@@ -1,3 +1,5 @@
+> Warning This project is archived. Please check out [Variable Mix and Match](https://github.com/kathyisawesome/wc-mnm-variable) as an alternative.
+
 # WooCommerce Mix and Match: Container Step
 
 ## Quickstart
