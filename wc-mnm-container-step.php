@@ -119,7 +119,7 @@ class WC_MNM_Container_Step {
 
 		if ( $product->is_type( 'mix-and-match' ) ) {
 
-			if( ! empty( $_POST[ '_mnm_container_step' ] ) ) {
+			if ( ! empty( $_POST[ '_mnm_container_step' ] ) ) {
 				$product->update_meta_data( '_mnm_container_step', intval( wc_clean( wp_unslash( $_POST[ '_mnm_container_step' ] ) ) ) );
 			} else {
 				$product->delete_meta_data( '_mnm_container_step' );
@@ -145,7 +145,7 @@ class WC_MNM_Container_Step {
 	 */
 	public static function validation( $valid, $product, $mnm_stock ) {
 
-		if( $product->get_meta( '_mnm_container_step', true ) && $product->get_min_container_size() !== $product->get_max_container_size() ) {		
+		if ( $product->get_meta( '_mnm_container_step', true ) && $product->get_min_container_size() !== $product->get_max_container_size() ) {		
 
 			$total_qty = $mnm_stock->get_total_quantity();
 			$step      = $product->get_meta( '_mnm_container_step', true );
@@ -241,7 +241,7 @@ class WC_MNM_Container_Step {
 	 */
 	public static function add_data_attributes( $params, $product ) {
 
-		if( self::validate_by_step( $product ) ) {
+		if ( self::validate_by_step( $product ) ) {
 
 			$new_params = array(
 			    'container_step' => $product->get_meta( '_mnm_container_step', true )
