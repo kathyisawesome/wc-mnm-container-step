@@ -157,11 +157,8 @@ class WC_MNM_Container_Step {
 					$product->get_title(),
 					$step
 				);
-				wc_add_notice( $error_message, 'error' );
-				$valid = false;
+				throw new Exception( $error_message );
 			}
-
-			$valid = true;
 
 		}
 
