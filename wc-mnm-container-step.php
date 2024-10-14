@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Mix and Match - Container Step
  * Plugin URI: https://github.com/kathyisawesome/wc-mnm-container-step
- * Version: 2.0.0
+ * Version: 2.0.1
  * Description: Require container size to be in quantity mnultiples, ie: 12,16,20,etc. 
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
@@ -31,7 +31,8 @@ class WC_MNM_Container_Step {
 	/**
 	 * constants
 	 */
-	const VERSION = '2.0.0';
+	const VERSION = '2.0.1';
+	const REQ_MNM_VERSION = '2.6.0';
 
 	/**
 	 * WC_MNM_Container_Step Constructor
@@ -42,7 +43,7 @@ class WC_MNM_Container_Step {
 	public static function init() {
 
 		// Quietly quit if MNM is not active.
-		if ( ! function_exists( 'wc_mix_and_match' ) ) {
+		if ( ! function_exists( 'wc_mix_and_match' ) || version_compare( wc_mix_and_match()->version, self::REQ_MNM_VERSION ) < 0 ) {
 			return false;
 		}
 
@@ -119,7 +120,7 @@ class WC_MNM_Container_Step {
 
 		if ( $product->is_type( 'mix-and-match' ) ) {
 
-			if( ! empty( $_POST[ '_mnm_container_step' ] ) ) {
+			if ( ! empty( $_POST[ '_mnm_container_step' ] ) ) {
 				$product->update_meta_data( '_mnm_container_step', intval( wc_clean( wp_unslash( $_POST[ '_mnm_container_step' ] ) ) ) );
 			} else {
 				$product->delete_meta_data( '_mnm_container_step' );
@@ -145,7 +146,7 @@ class WC_MNM_Container_Step {
 	 */
 	public static function validation( $valid, $product, $mnm_stock ) {
 
-		if( $product->get_meta( '_mnm_container_step', true ) && $product->get_min_container_size() !== $product->get_max_container_size() ) {		
+		if ( $product->get_meta( '_mnm_container_step', true ) && $product->get_min_container_size() !== $product->get_max_container_size() ) {		
 
 			$total_qty = $mnm_stock->get_total_quantity();
 			$step      = $product->get_meta( '_mnm_container_step', true );
@@ -157,11 +158,8 @@ class WC_MNM_Container_Step {
 					$product->get_title(),
 					$step
 				);
-				wc_add_notice( $error_message, 'error' );
-				$valid = false;
+				throw new Exception( $error_message );
 			}
-
-			$valid = true;
 
 		}
 
@@ -244,7 +242,7 @@ class WC_MNM_Container_Step {
 	 */
 	public static function add_data_attributes( $params, $product ) {
 
-		if( self::validate_by_step( $product ) ) {
+		if ( self::validate_by_step( $product ) ) {
 
 			$new_params = array(
 			    'container_step' => $product->get_meta( '_mnm_container_step', true )

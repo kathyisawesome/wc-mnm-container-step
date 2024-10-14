@@ -17,8 +17,8 @@ Mini-extension for [WooCommerce Mix and Match](https://woocommerce.com/products/
 ## Important
 
 1. This is proof of concept and not officially supported in any way.
-2. Requires Mix and Match Products 2.0.
-3. This is intended for containers that are dyanmically priced and packed separetely as there's currently no system for resolving total into X shipping packages at least at the Mix and Match level (some shipping plugins may be able to do this via box packer algorithms).... ex: 24 items aren't automatically parsed into 2, 12 pack shipping boxes. If you need fixed prices and are packing together you may want to check out [Grouped Mix and Match](https://github.com/kathyisawesome/wc-mnm-grouped)
+2. Requires **Mix and Match Products 2.6.0+**.
+3. This is intended for containers that are dynamically priced and packed separetely as there's currently no system for resolving total into X shipping packages at least at the Mix and Match level (some shipping plugins may be able to do this via box packer algorithms).... ex: 24 items aren't automatically parsed into 2, 12 pack shipping boxes. If you need fixed prices and are packing together you may want to check out [Grouped Mix and Match](https://github.com/kathyisawesome/wc-mnm-grouped)
 
 ## Usage
 
