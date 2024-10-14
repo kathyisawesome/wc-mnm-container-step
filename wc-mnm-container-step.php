@@ -65,8 +65,10 @@ class WC_MNM_Container_Step {
 		// QuickView support.
 		add_action( 'wc_quick_view_enqueue_scripts', array( __CLASS__, 'load_scripts' ) );
 
-		// Add to cart validation.
+		// Cart validation.
 		add_filter( 'wc_mnm_add_to_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
+		add_filter( 'wc_mnm_cart_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
+		add_filter( 'wc_mnm_add_to_order_container_validation', array( __CLASS__, 'validation' ), 10, 3 );
 
     }
 
@@ -146,6 +148,12 @@ class WC_MNM_Container_Step {
 	 */
 	public static function validation( $valid, $product, $mnm_stock ) {
 
+		$hook = current_filter();
+
+		$hook = str_replace( 'wc_mnm_', '', $hook );
+		$hook = str_replace( '_container_validation', '', $hook );
+		$context = str_replace( '_', '-', $hook );
+
 		if ( $product->get_meta( '_mnm_container_step', true ) && $product->get_min_container_size() !== $product->get_max_container_size() ) {		
 
 			$total_qty = $mnm_stock->get_total_quantity();
@@ -153,11 +161,17 @@ class WC_MNM_Container_Step {
 
 			// Validate the step modulus.
 			if ( 0 !== $total_qty % $step ) {
-				$error_message = sprintf( 
-					esc_html__( '&quot;%1$s&quot; is incorrectly configured. The total quantity of selected products must be a multiple of %2$d.', 'wc-mnm-container-step' ),
-					$product->get_title(),
-					$step
-				);
+
+				$reason = sprintf( esc_html__( 'The total quantity of selected products must be a multiple of %d.', 'wc-mnm-container-step' ), $step );
+				
+				if ( 'add-to-cart' === $context ) {
+					// translators: %1$s product title. %2$s Error reason.
+					$error_message = sprintf( _x( '&quot;%1$s&quot; cannot be added to the cart as configured. %2$s', 'wc-mnm-container-step' ), $product->get_title(), $reason );
+				} else {
+					// translators: %1$s product title. %2$s Error reason.
+					$error_message = sprintf( _x( '&quot;%1$s&quot; cannot be purchased as configured. %2$s', 'wc-mnm-container-step' ), $product->get_title(), $reason );
+				}
+
 				throw new Exception( $error_message );
 			}
 
